@@ -134,15 +134,19 @@ const handleRelease = async () => {
             // 赏金
             taskBounty: parseFloat(formState.taskBounty),
         })
-
+		console.log(resp)
+		if (resp.code !== 200) {
+			throw new Error(res.msg || '任务发布失败')
+		}
+		
         uni.requestPayment({
             provider: "wxpay",
-            orderInfo: resp.paySign,
-            timeStamp: resp.timeStamp,
-            nonceStr: resp.nonceStr,
-            package: resp.package,
-            signType: resp.signType,
-            paySign: resp.paySign,
+            orderInfo: resp.data.paySign,
+            timeStamp: resp.data.timeStamp,
+            nonceStr: resp.data.nonceStr,
+            package: resp.data.package,
+            signType: resp.data.signType,
+            paySign: resp.data.paySign,
             success: () => {
                 uni.showToast({
                     title: "支付成功!",
