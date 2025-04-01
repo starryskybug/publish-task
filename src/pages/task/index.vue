@@ -37,7 +37,7 @@ const listData = reactive({
 })
 
 const loadMoreStatus = computed(() => {
-    if (listData.loading) 
+    if (listData.loading)
         return 'loading'
     if (listData.pagination.hasMore)
         return 'more'
@@ -89,8 +89,13 @@ function handleTaskDetail(id, acceptStatus, subtaskId) {
                             content: '接单成功',
                             confirmColor: "#006E6B",
                             showCancel: false,
-                        })
-                        listData.data.find(item => item.id === id).acceptStatus = 2
+							success: function (res) {
+								listData.data.find(item => item.id === id).acceptStatus = 2
+								uni.navigateTo({
+									url: `/pages/profile/task/detail?id=${id}`
+								})
+							},
+						})
                     }).finally(() => {
                         loadingRef.value = false
                     })
@@ -112,32 +117,30 @@ function handleTaskDetail(id, acceptStatus, subtaskId) {
 </script>
 
 <template>
-    <view class="min-h-screen bg">
-        <Navbar title="任务中心" :show-back="false" />
-        
-        <!-- 任务列表区域 -->
-        <view class="px-30rpx py-20rpx mt-20rpx">
-            <!-- 任务项 -->
-            <view v-for="item in listData.data" :key="item.id" class="bg-white rounded-30rpx mb-30rpx p-30rpx flex justify-between items-center">
-                <view class="flex items-center">
-                    <view class="task-tag-small">
-                        <view>
-                            小任务
-                        </view>
-                    </view>
-                    <view class="ml-20rpx text-32rpx text-#333 font-bold">{{ item.taskName }}</view>
-                </view>
-                <button 
-                    class="py-14rpx w-180rpx text-center rounded-74rpx text-28rpx mx-0"
-                    :class="[item.acceptStatus !== 1 ? 'bg-#AAAAAA text-white font-bold leading-[1.5]' : 'btn-primary']"
-                    :loading="loadingRef"
-                    :disabled="loadingRef"
-                    @click="handleTaskDetail(item.id, item.acceptStatus, item.subtaskId)"
-                >
-                    {{ TASK_STATUS_MAP[item.acceptStatus] }}
-                </button>
-            </view>
-            <uni-load-more :status="loadMoreStatus"></uni-load-more>
-        </view>
-    </view>
+	<view class="min-h-screen bg">
+		<Navbar title="任务中心" :show-back="false" />
+
+		<!-- 任务列表区域 -->
+		<view class="px-30rpx py-20rpx mt-20rpx">
+			<!-- 任务项 -->
+			<view v-for="item in listData.data" :key="item.id" class="bg-white rounded-30rpx mb-30rpx p-30rpx flex justify-between items-center">
+				<view class="flex items-center">
+					<view class="task-tag-small">
+						<view>小任务</view>
+					</view>
+					<view class="ml-20rpx text-32rpx text-#333 font-bold">{{ item.taskName }}</view>
+				</view>
+				<button
+					class="py-14rpx w-180rpx text-center rounded-74rpx text-28rpx mx-0"
+					:class="[item.acceptStatus !== 1 ? 'bg-#AAAAAA text-white font-bold leading-[1.5]' : 'btn-primary']"
+					:loading="loadingRef"
+					:disabled="loadingRef"
+					@click="handleTaskDetail(item.id, item.acceptStatus, item.subtaskId)"
+				>
+					{{ TASK_STATUS_MAP[item.acceptStatus] }}
+				</button>
+			</view>
+			<uni-load-more :status="loadMoreStatus"></uni-load-more>
+		</view>
+	</view>
 </template>

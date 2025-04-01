@@ -1,6 +1,6 @@
 export const ACCESS_TOKEN_KEY = "Authorization"
 export const ACCOUNT_INFO_KEY = "Account_Info"
-export const API_BASE_URL = "http://27.150.128.4:8000"
+export const API_BASE_URL = "https://down.starryskybug.cn"
 
 export const TASK_STATUS_MAP = [
     { label: '未发布', color: '#FF9500' },
